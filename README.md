@@ -203,3 +203,97 @@ Auto format the smart contract code using the following command:
 ```bash
 forge fmt
 ```
+# Project Readme
+
+## Environment Setup
+
+Before running the smart contract tests, make sure to set up the environment as follows:
+
+1. Check your environment variables:
+   ```bash
+   Checking ENV
+   source .env
+   ```
+
+2. Confirm the SEPOLIA_URL is correctly set:
+   ```bash
+   echo $SEPOLIA_URL
+   ```
+
+## Smart Contract Testing
+
+To run smart contract tests, use the following commands:
+
+1. Basic test:
+   ```bash
+   forge test -vvv --fork-url $SEPOLIA_URL
+   ```
+
+2. Specific test (e.g., testPriceFeedVersionIsAccurate):
+   ```bash
+   forge test -m testPriceFeedVersionIsAccurate -vvv --fork-url $SEPOLIA_URL
+   ```
+
+3. Coverage (for better test coverage):
+   ```bash
+   forge coverage --fork-url $SEPOLIA_URL
+   ```
+
+## Installation of Smart Contract Dependencies
+
+Install smart contract dependencies using the following command:
+
+```bash
+forge install smartcontractkit/chainlink-brownie-contracts@0.8.0 --no-commit
+```
+
+## Checking Gas Fee and Storage
+
+### Checking Gas Fee
+
+To check the gas fee of a specific function using .gas-snapshot, follow these steps:
+
+1. Create a snapshot for a test function (e.g., testfunctionname):
+   ```bash
+   forge snapshot -m testfunctionname
+   ```
+
+2. Example code snippet for gas usage:
+   ```solidity
+   uint256 public constant GAS_PRICE = 1;
+   vm.txGasPrice(GAS_PRICE);
+   uint256 gasStart = gasleft();
+   vm.prank(fundMe.getOwner());
+   fundMe.withdraw();
+   uint256 gasEnd = gasleft();
+   uint256 gasUsed = (gasStart - gasEnd) * tx.gasprice;
+   console.log(gasUsed);
+   ```
+
+### Checking Storage
+
+To inspect the storage layout of a contract variable (e.g., FundMe), use the following command:
+
+```bash
+forge inspect FundMe storageLayout
+```
+
+### Deploying Simple Storage Contract
+
+To deploy a SimpleStorage contract script, execute the following command:
+
+```bash
+forge script script/DeploySimpleStorage.s.sol --rpc-url http://127.0.0.1:8545 --broadcast --private-key 0xac0….2ff80
+```
+
+Take note of the deployed contract address (e.g., 0xfdj..sfjfo) for further operations.
+
+### Casting Storage (For Indexing in Storage Array)
+
+To cast storage for indexing in a storage array, use the following command:
+
+```bash
+forge cast-storage 0xfdj..sfjfo 2
+```
+
+Replace 0xfdj..sfjfo with the actual contract address and 2 with the desired index for storage array.
